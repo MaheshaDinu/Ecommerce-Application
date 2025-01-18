@@ -2,42 +2,90 @@ package lk.ijse.ecommerceapplication.DAO.custom.impl;
 
 import lk.ijse.ecommerceapplication.DAO.custom.ProductDAO;
 import lk.ijse.ecommerceapplication.Entity.Product;
+import lk.ijse.ecommerceapplication.config.SessionFactoryConfig;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import java.util.List;
 
 public class ProductDAOImpl implements ProductDAO {
     @Override
     public void save(Product product) {
-
+        try (Session session = SessionFactoryConfig.getInstance().getSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.persist(product);
+            transaction.commit();
+        }
     }
 
     @Override
     public Product findById(String id) {
-        return null;
+        try (Session session = SessionFactoryConfig.getInstance().getSession()) {
+            return session.get(Product.class, id);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     @Override
     public List<Product> getAll() {
-        return null;
+        try (Session session = SessionFactoryConfig.getInstance().getSession()) {
+            Query<Product> query = session.createQuery("FROM Product", Product.class);
+            return query.list();
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     @Override
     public void update(Product product) {
-
+        try (Session session = SessionFactoryConfig.getInstance().getSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.merge(product);
+            transaction.commit();
+        }
     }
 
     @Override
     public void delete(String id) {
-
+        try (Session session = SessionFactoryConfig.getInstance().getSession()) {
+            Transaction transaction = session.beginTransaction();
+            Product product = session.get(Product.class, id);
+            if (product != null) {
+                session.remove(product);
+            }
+            transaction.commit();
+        }
     }
 
     @Override
     public List<Product> findByName(String name) {
-        return null;
+        try (Session session = SessionFactoryConfig.getInstance().getSession()) {
+            Query<Product> query = session.createQuery("FROM Product WHERE name = :name", Product.class);
+            query.setParameter("name", name);
+            return query.list();
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     @Override
     public List<Product> findByCategory(String categoryId) {
-        return null;
+        try (Session session = SessionFactoryConfig.getInstance().getSession()) {
+            Query<Product> query = session.createQuery("FROM Product WHERE category.id = :categoryId", Product.class);
+            query.setParameter("categoryId", categoryId);
+            return query.list();
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
     }
 }
