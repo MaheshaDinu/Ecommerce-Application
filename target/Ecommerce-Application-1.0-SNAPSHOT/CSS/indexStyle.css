@@ -1,0 +1,22 @@
+body{
+    background: url('../Assets/Images/UnishopZone Background removed.png') no-repeat center rgb(209, 217, 243);
+    background-size: contain;
+    background-attachment: fixed;
+
+}
+
+#hero {
+
+    height:40vh;
+    color: rgb(245, 248, 254);
+    text-shadow: 2px 4px 10px rgba(0, 0, 0, 0.9);
+}
+
+#hero .btn {
+    margin-top: 20px;
+}
+.product-card img {
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+}
