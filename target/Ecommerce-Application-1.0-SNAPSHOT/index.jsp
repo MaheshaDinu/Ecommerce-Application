@@ -25,7 +25,7 @@
 <!-- Product Cards Section -->
 <section id="products" class="py-5">
   <div class="container">
-    <h2 class="text-center mb-4">Featured Products</h2>
+    <h2 class="text-center mb-4 bg-primary-subtle rounded-pill " style="--bs-bg-opacity: .3;">Featured Products</h2>
     <div class="row">
       <div class="col-md-4">
         <div class="card product-card shadow">
