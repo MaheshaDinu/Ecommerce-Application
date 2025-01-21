@@ -16,19 +16,8 @@
 <body>
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="#"><img src="../Assets/Images/UnishopZone%20Background%20removed.png" style="width: 5rem; height: 5rem" id="logo-img"> UniShopZone</a>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="adminDashboard.jsp">Products</a></li>
-                <li class="nav-item"><a class="nav-link" href="adminCategoryManagement.jsp">Categories</a></li>
-                <li class="nav-item"><a class="nav-link" href="adminOrdersView.jsp">Orders</a></li>
-                <li class="nav-item"><a class="nav-link active" href="adminUserActivation.jsp">Users</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<% String currentPage = "user"; %>
+<%@ include file="../includes/adminNavBar.jsp" %>
 
 <!-- Content -->
 <div class="container mt-5">
