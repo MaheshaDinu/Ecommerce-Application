@@ -41,7 +41,7 @@
 <nav class="navbar navbar-expand-lg bg-white shadow-sm">
   <div class="container">
     <a class="navbar-brand" href="#">
-      <img src="Assets/Images/UnishopZone%20Background%20removed.png" alt="UniShopZone" style="height: 50px;">
+      <img src="../Assets/Images/UnishopZone%20Background%20removed.png" alt="UniShopZone" style="height: 50px;">
       UniShopZone
     </a>
 
