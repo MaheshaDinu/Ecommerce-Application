@@ -13,7 +13,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link <%= "product".equals(currentPage) ? "active" : "" %>" href="adminDashboard.jsp">Products</a></li>
+                <li class="nav-item"><a class="nav-link <%= "product".equals(currentPage) ? "active" : "" %>" href="../pages/adminProductManagement.jsp">Products</a></li>
                 <li class="nav-item"><a class="nav-link <%= "category".equals(currentPage) ? "active" : "" %>" href="adminCategoryManagement.jsp">Categories</a></li>
                 <li class="nav-item"><a class="nav-link <%= "orders".equals(currentPage) ? "active" : "" %>" href="adminOrdersView.jsp">Orders</a></li>
                 <li class="nav-item"><a class="nav-link <%= "users".equals(currentPage) ? "active" : "" %>" href="adminUserActivation.jsp">Users</a></li>

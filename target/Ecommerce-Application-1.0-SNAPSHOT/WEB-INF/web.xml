@@ -9,4 +9,9 @@
         <res-type>javax.sql.DataSource</res-type>
         <res-auth>Container</res-auth>
     </resource-ref>
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/login-servlet</url-pattern>
+    </servlet-mapping>
+
 </web-app>

@@ -16,24 +16,47 @@
 <% String currentPage = "login"; %>
 <%@ include file="includes/landingNavBar.jsp" %>
 
+<%String error = (String) session.getAttribute("error");%>
+
+
+
 
 <div class="container d-flex flex-column align-items-center justify-content-center" style="min-height: 90vh;">
-    <div class="loginBox">
-        <img class="user" src="Assets/Images/UnishopZone%20Background%20removed.png" height="100px" width="100px">
-        <h3>Sign in here</h3>
-        <form action="login.php" method="post">
-            <div class="inputBox">
-                <input id="uname" type="text" name="Username" placeholder="Username">
-                <input id="pass" type="password" name="Password" placeholder="Password">
+    <!-- Login Card -->
+    <div class="card shadow-lg p-4" style="width: 400px; border-radius: 10px;">
+        <div class="text-center mb-3">
+            <img src="Assets/Images/UnishopZone%20Background%20removed.png" alt="User Icon" height="100" width="100">
+        </div>
+        <h4 class="text-center text-primary mb-4">Sign In</h4>
+        <form action="login-servlet" method="post">
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input id="username" type="text" name="Username" class="form-control" placeholder="Enter your username" required>
             </div>
-            <input type="submit" name="" value="Login">
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input id="password" type="password" name="Password" class="form-control" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Login</button>
         </form>
-        <a href="#">Don't have an Account? Register</a>
+        <div class="text-center mt-3">
+            <a href="register.jsp" class="text-decoration-none">Don't have an account? Register here</a>
+        </div>
     </div>
+
+    <% if (error != null) { %>
+    <!-- Alert for invalid credentials -->
+    <div class="alert alert-danger alert-dismissible fade show position-absolute top-50 start-50 translate-middle text-center w-25" style="z-index: 2; " role="alert">
+        <strong>Invalid Credentials!</strong><br> <%= error %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <% session.removeAttribute("error"); %>
+    <% } %>
 </div>
 
 
-</div>
+
+
 <%--footer--%>
 <%@include file="includes/footer.jsp"%>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>

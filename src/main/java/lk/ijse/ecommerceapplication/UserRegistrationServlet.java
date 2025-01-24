@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lk.ijse.ecommerceapplication.BO.BOFactory;
-import lk.ijse.ecommerceapplication.BO.custom.UserSaveBO;
+import lk.ijse.ecommerceapplication.BO.custom.UserBO;
 import lk.ijse.ecommerceapplication.Entity.User;
 
 import java.io.IOException;
@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @WebServlet(name = "UserRegistrationServlet", value = "/user-registration-servlet")
 public class UserRegistrationServlet extends HttpServlet {
 
-    UserSaveBO userSaveBO = (UserSaveBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.SAVE_USER);
+    UserBO userBO = (UserBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.USER);
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String firstName = req.getParameter("firstName");
@@ -42,7 +42,7 @@ public class UserRegistrationServlet extends HttpServlet {
         user.setAddress(address);
         user.setDob(LocalDate.parse(dob));
 
-        boolean isSaved = userSaveBO.savUser(user);
+        boolean isSaved = userBO.saveUser(user);
         if (isSaved){
             resp.sendRedirect("register.jsp?saveSuccess=User Saved Success Fully!");
         }

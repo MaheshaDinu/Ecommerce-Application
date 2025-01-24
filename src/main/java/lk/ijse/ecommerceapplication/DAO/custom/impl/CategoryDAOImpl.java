@@ -1,5 +1,8 @@
 package lk.ijse.ecommerceapplication.DAO.custom.impl;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import lk.ijse.ecommerceapplication.DAO.custom.CategoryDAO;
 import lk.ijse.ecommerceapplication.Entity.Category;
 import lk.ijse.ecommerceapplication.Entity.User;
@@ -8,6 +11,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryDAOImpl implements CategoryDAO {
@@ -40,13 +44,23 @@ public class CategoryDAOImpl implements CategoryDAO {
     @Override
     public List<Category> getAll() {
         try (Session session = SessionFactoryConfig.getInstance().getSession()){
-            Query<Category> query = session.createQuery("FROM Category ",Category.class);
-            return query.list();
-        } catch (Exception e){
+            Transaction transaction = session.beginTransaction();
+            List<Category> categoryList = session.createQuery("from Category ", Category.class).list();
+            if (categoryList == null || categoryList.isEmpty()) {
+                System.out.println("No categories found in the database.");
+            } else {
+                System.out.println("Fetched categories: " + categoryList.size());
+            }
+
+            return categoryList;
+        } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return new ArrayList<>(); // Return empty list instead of null
         }
     }
+
+
+
 
     @Override
     public void update(Category category) {
