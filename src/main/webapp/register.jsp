@@ -15,6 +15,9 @@
 <% String currentPage = "register"; %>
 <%@ include file="includes/landingNavBar.jsp" %>
 
+<% String passwordMisMatch = request.getParameter("passwordMisMatch"); %>
+<% String saveSuccessful = request.getParameter("saveSuccess");%>
+
 
 
 <section class="h-100 bg-gradient">
@@ -33,7 +36,7 @@
                                 <h3 class="mb-5 text-uppercase">Customer Registration Form</h3>
 
                                 <!-- Form starts here -->
-                                <form action="UserRegistrationServlet" method="post">
+                                <form action="user-registration-servlet" method="post">
                                     <div class="row">
                                         <div class="col-md-6 mb-4">
                                             <div class="form-outline">
@@ -55,6 +58,16 @@
                                     </div>
 
                                     <div class="form-outline mb-4">
+                                        <label class="form-label" for="userType">User Type</label>
+                                        <select id="userType" name="userType" class="form-select form-select-lg" required>
+                                            <option value="" disabled selected>Select User Type</option>
+                                            <option value="admin">Admin</option>
+                                            <option value="customer">Customer</option>
+                                        </select>
+                                    </div>
+
+
+                                    <div class="form-outline mb-4">
                                         <input type="email" id="email" name="email" class="form-control form-control-lg" required />
                                         <label class="form-label" for="email">Email Address</label>
                                     </div>
@@ -65,6 +78,11 @@
                                     </div>
 
                                     <div class="form-outline mb-4">
+                                        <%
+                                        if (passwordMisMatch !=null){%>
+                                            <p class="text-danger fw-bold mt-2"><%=passwordMisMatch%></p>
+                                        <%}%>
+
                                         <input type="password" id="confirmPassword" name="confirmPassword" class="form-control form-control-lg" required />
                                         <label class="form-label" for="confirmPassword">Confirm Password</label>
                                     </div>
@@ -94,8 +112,30 @@
         </div>
     </div>
 </section>
+<%
+if (saveSuccessful !=null){%>
+<!-- Toast Container -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                <%=saveSuccessful%>
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+<%}%>
 
 
+<script>
+    // Show the toast when the page loads (adjust as needed for your logic)
+    document.addEventListener("DOMContentLoaded", function () {
+        const toastElement = document.getElementById('successToast');
+        const toast = new bootstrap.Toast(toastElement, { delay: 10000 }); // 10 seconds delay
+        toast.show();
+    });
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 </body>

@@ -6,7 +6,7 @@ import lk.ijse.ecommerceapplication.Entity.Order;
 import java.util.List;
 
 public interface OrderDAO extends CrudDAO<Order,String> {
-    void save(Order order);
+    boolean save(Order order);
 
     Order findById(String id);
 

@@ -14,12 +14,17 @@ public class UserDAOImpl implements UserDAO {
 
 
     @Override
-    public void save(User user) {
+    public boolean save(User user) {
         try(Session session = SessionFactoryConfig.getInstance().getSession()) {
             Transaction transaction = session.beginTransaction();
             session.persist(user);
             transaction.commit();
+            return true;
 
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return false;
         }
     }
 
