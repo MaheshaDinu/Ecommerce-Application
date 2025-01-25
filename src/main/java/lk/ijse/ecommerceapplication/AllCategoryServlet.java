@@ -13,16 +13,17 @@ import lk.ijse.ecommerceapplication.Entity.Category;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "AllCategoryServlet", value = "/all-category-servlet")
+@WebServlet(name = "AllCategoryServlet", urlPatterns = {"/all-category-servlet"})
 public class AllCategoryServlet extends HttpServlet {
     CategoryBO categoryBO = (CategoryBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CATEGORY);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("AllCategoryServlet doGet called");
         List<Category> categoryList = categoryBO.getAll();
         if (categoryList != null && !categoryList.isEmpty()) {
             req.setAttribute("categoryList", categoryList);
-            RequestDispatcher requestDispatcher = req.getRequestDispatcher("/pages/adminCategoryManagement.jsp");
+            RequestDispatcher requestDispatcher = req.getRequestDispatcher("/WEB-INF/pages/adminCategoryManagement.jsp");
             requestDispatcher.forward(req, resp);
         } else {
             resp.sendRedirect("/pages/adminCategoryManagement.jsp?allListFailed=No categories found.");

@@ -23,9 +23,9 @@ public class LoginServlet extends HttpServlet {
         if (user!=null){
             if (password.equals(user.getPassword())){
                 if (user.getRole()== User.Role.ADMIN){
-                    resp.sendRedirect(req.getContextPath()+"/pages/adminProductManagement.jsp");
+                    resp.sendRedirect(req.getContextPath()+"/adminProductManagement.jsp");
                 } else {
-                    resp.sendRedirect(req.getContextPath()+"/pages/customerProductPage.jsp");
+                    resp.sendRedirect(req.getContextPath()+"/customerProductPage.jsp");
                 }
             } else {
                 req.getSession().setAttribute("error","Password is incorrect!");

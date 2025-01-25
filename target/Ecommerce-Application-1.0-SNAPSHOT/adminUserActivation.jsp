@@ -17,7 +17,7 @@
 
 <!-- Navbar -->
 <% String currentPage = "user"; %>
-<%@ include file="../includes/adminNavBar.jsp" %>
+<%@ include file="includes/adminNavBar.jsp" %>
 
 <!-- Content -->
 <div class="container mt-5">

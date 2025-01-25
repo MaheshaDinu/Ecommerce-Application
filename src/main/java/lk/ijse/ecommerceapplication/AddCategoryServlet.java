@@ -28,9 +28,9 @@ public class AddCategoryServlet extends HttpServlet {
         boolean isSaved = categoryBO.save(category);
 
         if (isSaved) {
-            resp.sendRedirect(req.getContextPath() + "/pages/adminCategoryManagement.jsp?saveSuccess=Category Saved Successfully!");
+            resp.sendRedirect(req.getContextPath() + "adminCategoryManagement.jsp?saveSuccess=Category Saved Successfully!");
         } else {
-            resp.sendRedirect(req.getContextPath() + "/pages/adminCategoryManagement.jsp?saveFail=Category Save Failed!");
+            resp.sendRedirect(req.getContextPath() + "adminCategoryManagement.jsp?saveFail=Category Save Failed!");
         }
     }
 }

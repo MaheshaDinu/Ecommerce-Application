@@ -16,11 +16,11 @@
 
 <!-- Navbar -->
 <% String currentPage = "category"; %>
-<%@ include file="../includes/adminNavBar.jsp" %>
+<%@ include file="../../includes/adminNavBar.jsp" %>
 
 <% String saveSuccessful = request.getParameter("saveSuccess");%>
 <% String saveFail = request.getParameter("saveFail");%>
-<% String allListFailed = request.getParameter("allListFailed"); %>
+
 
 <!-- Content -->
 <div class="container mt-5">
@@ -29,13 +29,15 @@
     <h3>Category Management</h3>
     <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCategoryModal">Add Category</button>
   </div>
-
+  <form action="all-category-servlet" method="get">
+  <% String allListFailed = request.getParameter("allListFailed"); %>
   <!-- Display error if allListFailed is set -->
   <% if (allListFailed != null) { %>
   <div class="alert alert-warning" role="alert">
     <%= allListFailed %>
   </div>
   <% } else { %>
+
   <%
     List<Category> categoryList = (List<Category>) request.getAttribute("categoryList");
     if (categoryList != null && !categoryList.isEmpty()) {
@@ -71,7 +73,9 @@
   </div>
   <% } %>
   <% } %>
+  </form>
 </div>
+
 
 
 <!-- Add Category Modal -->

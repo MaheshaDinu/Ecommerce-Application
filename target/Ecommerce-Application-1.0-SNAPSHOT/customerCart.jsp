@@ -40,7 +40,7 @@
 <body>
 <!-- Navbar -->
 <% String currentPage = "cart"; %>
-<%@ include file="../includes/customerNavBar.jsp" %>
+<%@ include file="includes/customerNavBar.jsp" %>
 
 <!-- Cart Content -->
 <div class="container mt-4">

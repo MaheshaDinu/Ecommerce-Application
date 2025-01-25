@@ -33,7 +33,7 @@
 <body>
 <!-- Navbar -->
 <% String currentPage = "user"; %>
-<%@ include file="../includes/customerNavBar.jsp" %>
+<%@ include file="includes/customerNavBar.jsp" %>
 
 <!-- Main Content -->
 <div class="container mt-4">

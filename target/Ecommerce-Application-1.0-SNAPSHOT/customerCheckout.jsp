@@ -30,7 +30,7 @@
 <body>
 <!-- Navbar -->
 <% String currentPage = "checkout"; %>
-<%@ include file="../includes/customerNavBar.jsp" %>
+<%@ include file="includes/customerNavBar.jsp" %>
 
 <!-- Checkout Content -->
 <div class="container mt-4">
