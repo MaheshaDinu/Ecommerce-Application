@@ -70,14 +70,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="addProductForm">
+                <form id="addProductForm" enctype="multipart/form-data">
                     <div class="mb-3">
                         <label for="category" class="form-label">Category</label>
                         <select class="form-select" id="category" required>
-                            <option value="" selected disabled>Select a category</option>
-                            <option value="electronics">Electronics</option>
-                            <option value="appliances">Appliances</option>
-                            <option value="clothing">Clothing</option>
+
                         </select>
                     </div>
                     <div class="mb-3">
@@ -172,7 +169,26 @@
     </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    const contextPath = "<%= request.getContextPath() %>";
+    console.log(contextPath); // Add this line to check the contextPath
+    $('#addProductModal').on('show.bs.modal', function() {
+        $.get(contextPath+'/get-categories-servlet', function(data) {
+            console.log(data)
+            const categorySelect = $('#category');
+            categorySelect.empty(); // Clear any existing options
+            categorySelect.append('<option value="" selected disabled>Select a category</option>');
+
+            // Append categories to dropdown
+            data.forEach(function(category) {
+                categorySelect.append('<option value="' + category.categoryId + '">' + category.name + '</option>');
+            });
+        });
+    });
+
+
     function populateEditModal(productId) {
         // Populate the Edit Modal with product details (use AJAX or data from your database)
         document.getElementById('editProductName').value = "Laptop";
@@ -188,6 +204,6 @@
     }
 </script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
