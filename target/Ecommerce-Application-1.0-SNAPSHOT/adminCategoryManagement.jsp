@@ -60,8 +60,8 @@
       <td><%= category.getName() %></td>
       <td><%= category.getDescription() %></td>
       <td>
-        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editCategoryModal" onclick="populateEditCategoryModal(<%= category.getCategoryId() %>)">Edit</button>
-        <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal" onclick="setDeleteCategoryConfirmation(<%= category.getCategoryId() %>)">Delete</button>
+        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editCategoryModal" onclick="populateEditCategoryModal(`<%= category.getCategoryId()%>`, `<%=category.getName()%>`,`<%=category.getDescription()%>`)">Edit</button>
+        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal" onclick="setDeleteCategoryConfirmation(`<%= category.getCategoryId()%>`, `<%=category.getName()%>`,`<%=category.getDescription()%>`)">Delete</button>
       </td>
     </tr>
     <% } %>
@@ -112,14 +112,18 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form id="editCategoryForm">
+        <form id="editCategoryForm" action="edit-category-servlet" method="post">
+          <div class="mb-3">
+            <label for="editCategoryId" class="form-label">Category ID</label>
+            <input type="text" class="form-control" id="editCategoryId" name="categoryId" readonly>
+          </div>
           <div class="mb-3">
             <label for="editCategoryName" class="form-label">Category Name</label>
-            <input type="text" class="form-control" id="editCategoryName" required>
+            <input type="text" class="form-control" id="editCategoryName" name="editCategoryName" required>
           </div>
           <div class="mb-3">
             <label for="editCategoryDescription" class="form-label">Description</label>
-            <textarea class="form-control" id="editCategoryDescription" rows="3" required></textarea>
+            <textarea class="form-control" id="editCategoryDescription" name="editCategoryDescription" rows="3" required></textarea>
           </div>
           <button type="submit" class="btn btn-primary">Update Category</button>
         </form>
@@ -136,42 +140,56 @@
         <h5 class="modal-title" id="deleteCategoryModalLabel">Confirm Deletion</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        Are you sure you want to delete this category?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-danger">Delete</button>
-      </div>
+      <form action="delete-category-servlet" method="post" id="deleteCategoryForm">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="deleteCategoryId" class="form-label">Category ID</label>
+            <input type="text" class="form-control" id="deleteCategoryId" name="categoryId" readonly>
+          </div>
+          <div class="mb-3">
+            <label for="deleteCategoryName" class="form-label">Category Name</label>
+            <input type="text" class="form-control" id="deleteCategoryName" readonly>
+          </div>
+          <div class="mb-3">
+            <label for="deleteCategoryDescription" class="form-label">Category Description</label>
+            <textarea class="form-control" id="deleteCategoryDescription" rows="3" readonly></textarea>
+          </div>
+          <p class="text-danger">Are you sure you want to delete this category?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
-<%
-  if (saveSuccessful !=null){%>
-<!-- Toast Container -->
+
+<% if (saveSuccessful != null && !saveSuccessful.isEmpty()) { %>
+<!-- Success Toast -->
 <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
   <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="d-flex">
       <div class="toast-body">
-        <%=saveSuccessful%>
+        <%= saveSuccessful %>
       </div>
       <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
   </div>
 </div>
-<%} else {%>
-<!-- Toast Container -->
+<% } else if (saveFail != null && !saveFail.isEmpty()) { %>
+<!-- Fail Toast -->
 <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
   <div id="failToast" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="d-flex">
       <div class="toast-body">
-        <%=saveFail%>
+        <%= saveFail %>
       </div>
       <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
   </div>
 </div>
-<%}%>
+<% } %>
 
 <script>
   // Show the toast when the page loads (adjust as needed for your logic)
@@ -185,15 +203,17 @@
     const toast = new bootstrap.Toast(toastElement, { delay: 10000 }); // 10 seconds delay
     toast.show();
   });
-  function populateEditCategoryModal(categoryId) {
+  function populateEditCategoryModal(categoryId, categoryName, categoryDescription) {
     // Populate the Edit Modal with category details (use AJAX or data from your database)
-    document.getElementById('editCategoryName').value = "Electronics";
-    document.getElementById('editCategoryDescription').value = "Electronic gadgets and devices";
+    document.getElementById('editCategoryId').value = categoryId;
+    document.getElementById('editCategoryName').value = categoryName;
+    document.getElementById('editCategoryDescription').value = categoryDescription;
   }
 
-  function setDeleteCategoryConfirmation(categoryId) {
-    // Set category ID to delete (use AJAX or additional logic if needed)
-    console.log("Preparing to delete category with ID: " + categoryId);
+  function setDeleteCategoryConfirmation(categoryId, categoryName, categoryDescription) {
+    document.getElementById('deleteCategoryId').value = categoryId;
+    document.getElementById('deleteCategoryName').value = categoryName;
+    document.getElementById('deleteCategoryDescription').value = categoryDescription;
   }
 </script>
 

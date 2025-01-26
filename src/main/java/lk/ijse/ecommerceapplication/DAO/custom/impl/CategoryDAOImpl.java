@@ -65,28 +65,39 @@ public class CategoryDAOImpl implements CategoryDAO {
 
 
     @Override
-    public void update(Category category) {
+    public boolean update(Category category) {
         try (Session session = SessionFactoryConfig.getInstance().getSession()){
             Transaction transaction = session.beginTransaction();
             session.merge(category);
             transaction.commit();
-
+            return true;
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
         }
 
     }
 
     @Override
-    public void delete(String id) {
-        try (Session session = SessionFactoryConfig.getInstance().getSession()){
+    public boolean delete(String id) {
+        try (Session session = SessionFactoryConfig.getInstance().getSession()) {
             Transaction transaction = session.beginTransaction();
-            Category category = session.get(Category.class,id);
-            if (category != null){
-                session.remove(category);
+            Category category = session.get(Category.class, id);
+            if (category != null) {
+                session.remove(category); // Remove the category
+                transaction.commit();    // Commit the transaction
+                return true;
             }
-            transaction.commit();
+            transaction.rollback();      // Rollback if the category doesn't exist
+            return false;
+        } catch (Exception e) {
+            e.printStackTrace();         // Log the exception
+            return false;
         }
-
     }
+
+
+
 
     @Override
     public Category findByName(String name) {

@@ -11,15 +11,26 @@ public class CategoryBOImpl implements CategoryBO {
     CategoryDAO categoryDAO = (CategoryDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.CATEGORY);
     @Override
     public boolean save(Category category) {
-        if (categoryDAO.save(category)){
-            return true;
-        } else {
-            return false;
-        }
+        return categoryDAO.save(category);
     }
 
     @Override
     public List<Category> getAll() {
         return categoryDAO.getAll();
+    }
+
+    @Override
+    public Category getById(String id) {
+        return categoryDAO.findById(id);
+    }
+
+    @Override
+    public boolean update(Category category) {
+        return categoryDAO.update(category);
+    }
+
+    @Override
+    public boolean delete(String id) {
+        return categoryDAO.delete(id);
     }
 }

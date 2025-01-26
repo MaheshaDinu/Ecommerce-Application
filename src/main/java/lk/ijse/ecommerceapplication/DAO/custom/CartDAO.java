@@ -8,7 +8,7 @@ public interface CartDAO extends CrudDAO<Cart,String> {
 
     Cart findById(String id);
 
-    void update(Cart cart);
+    boolean update(Cart cart);
 
-    void delete(String id);
+    boolean delete(String id);
 }
