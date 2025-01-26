@@ -1,4 +1,5 @@
-<%--
+<%@ page import="lk.ijse.ecommerceapplication.Entity.Product" %>
+<%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: Mahesha Dinushan
   Date: 20/01/2025
@@ -22,6 +23,8 @@
 <% String saveSuccess = request.getParameter("saveSuccess");%>
 <% String saveFail = request.getParameter("saveFail");%>
 
+
+
 <!-- Content -->
 <div class="container mt-5">
     <h1 class="text-center mb-4">ADMIN</h1>
@@ -32,6 +35,16 @@
 
     </div>
     <button class="btn btn-success mb-4" data-bs-toggle="modal" data-bs-target="#addProductModal">Add Product</button>
+    <% String allListFailed = request.getParameter("allListFailed"); %>
+    <!-- Display error if allListFailed is set -->
+    <% if (allListFailed != null) { %>
+    <div class="alert alert-warning" role="alert">
+        <%= allListFailed %>
+    </div>
+    <% } else { %>
+    <% List<Product> productList = (List<Product>) request.getAttribute("productList");
+    if (productList !=null && !productList.isEmpty()){
+    %>
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -46,22 +59,26 @@
         </tr>
         </thead>
         <tbody>
+        <%for (Product product : productList){%>
         <tr>
-            <td>1</td>
-            <td>Electronics</td>
-            <td>Laptop</td>
-            <td>High-performance laptop</td>
-            <td>$1000</td>
-            <td>50</td>
-            <td><img src="Assets/Images/laptop.png" alt="Laptop" class="table-img"></td>
+            <td><%=product.getProductId()%></td>
+            <td><%=product.getCategory().getName()%></td>
+            <td><%=product.getName()%></td>
+            <td><%=product.getDescription()%></td>
+            <td>Rs.<%=String .valueOf(product.getPrice())%></td>
+            <td><%=String.valueOf(product.getStockQuantity())%></td>
+            <td><img src="<%= request.getContextPath()+"/"+ product.getImageUrl() %>" alt="<%= product.getName() %>" class="table-img" style="width: 50px; height: 50px"></td>
             <td>
-                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editProductModal" onclick="populateEditModal(1)">Edit</button>
-                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteProductModal" onclick="setDeleteConfirmation(1)">Delete</button>
+                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editProductModal" onclick="populateEditModal(<%=product.getProductId()%>,<%=product.getName()%>,<%=product.getPrice()%>,<%=product.getDescription()%>,<%=product.getStockQuantity()%>,<%=product.getCategory()%>)">Edit</button>
+                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteProductModal" onclick="setDeleteConfirmation(`<%=product.getProductId()%>`)">Delete</button>
             </td>
         </tr>
+        <%}%>
         <!-- More rows can be dynamically added -->
         </tbody>
     </table>
+    <%}
+    }%>
 </div>
 
 <!-- Add Product Modal -->
@@ -74,6 +91,7 @@
             </div>
             <div class="modal-body">
                 <form id="addProductForm" enctype="multipart/form-data" action="add-product-servlet" method="post">
+
                     <div class="mb-3">
                         <label for="category" class="form-label">Category</label>
                         <select class="form-select" id="category" name="categoryId" required>
@@ -116,35 +134,32 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="editProductForm">
+                <form id="editProductForm" action="update-product-servlet" method="post">
+                    <div class="mb-3">
+                        <label for="editProductId" class="form-label">Product ID</label>
+                        <input type="text" class="form-control" id="editProductId" name="editProductId" readonly>
+                    </div>
                     <div class="mb-3">
                         <label for="editCategory" class="form-label">Category</label>
-                        <select class="form-select" id="editCategory" required>
-                            <option value="" selected disabled>Select a category</option>
-                            <option value="electronics">Electronics</option>
-                            <option value="appliances">Appliances</option>
-                            <option value="clothing">Clothing</option>
+                        <select class="form-select" id="editCategory" name="editCategory" required>
+
                         </select>
                     </div>
                     <div class="mb-3">
                         <label for="editProductName" class="form-label">Product Name</label>
-                        <input type="text" class="form-control" id="editProductName" required>
+                        <input type="text" class="form-control" id="editProductName" name="editProductName" required>
                     </div>
                     <div class="mb-3">
                         <label for="editDescription" class="form-label">Description</label>
-                        <textarea class="form-control" id="editDescription" rows="3" required></textarea>
+                        <textarea class="form-control" id="editDescription" name="editDescription" rows="3" required></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="editPrice" class="form-label">Price</label>
-                        <input type="number" class="form-control" id="editPrice" required>
+                        <input type="number" class="form-control" id="editPrice" name="editPrice" required>
                     </div>
                     <div class="mb-3">
                         <label for="editStock" class="form-label">Stock</label>
-                        <input type="number" class="form-control" id="editStock" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="editProductImage" class="form-label">Product Image</label>
-                        <input type="file" class="form-control" id="editProductImage" accept="image/*">
+                        <input type="number" class="form-control" id="editStock" name="editStock" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Update Product</button>
                 </form>
@@ -215,15 +230,30 @@
             });
         });
     });
+    $('#editProductModal').on('show.bs.modal', function() {
+        $.get(contextPath+'/get-categories-servlet', function(data) {
+            console.log(data)
+            const categorySelect = $('#editCategory');
+            categorySelect.empty(); // Clear any existing options
+            categorySelect.append('<option value="" selected disabled>Select a category</option>');
+
+            // Append categories to dropdown
+            data.forEach(function(category) {
+                categorySelect.append('<option value="' + category.categoryId + '">' + category.name + '</option>');
+            });
+        });
+    });
 
 
-    function populateEditModal(productId) {
+    function populateEditModal(productId, categoryName, price, description, stock, category) {
         // Populate the Edit Modal with product details (use AJAX or data from your database)
-        document.getElementById('editProductName').value = "Laptop";
-        document.getElementById('editDescription').value = "High-performance laptop";
-        document.getElementById('editPrice').value = "1000";
-        document.getElementById('editStock').value = "50";
-        document.getElementById('editCategory').value = "electronics";
+        document.getElementById('editProductId').value = productId;
+        document.getElementById('editProductName').value = categoryName;
+        document.getElementById('editDescription').value = description;
+        document.getElementById('editPrice').value = price;
+        document.getElementById('editStock').value = stock;
+        const categorySelect = document.getElementById('editCategory');
+        categorySelect.value = category;
     }
 
     function setDeleteConfirmation(productId) {

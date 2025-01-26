@@ -35,7 +35,7 @@ public class AddProductServlet extends HttpServlet {
         Part productImage = req.getPart("productImage");
 
         // Save images to `src/main/Assets/Images/uploads`
-        String uploadDir = "F:\\IJSE\\Advance API Development\\Ecommerce-Application\\src\\main\\Assets\\Images\\uploads\\";
+        String uploadDir = "F:\\EcommerceAppUploads\\Assets\\Images\\uploads";
         File uploadDirFile = new File(uploadDir);
         if (!uploadDirFile.exists()) {
             uploadDirFile.mkdirs(); // Create the directory if it doesn't exist
@@ -76,9 +76,9 @@ public class AddProductServlet extends HttpServlet {
 
         // Redirect based on success or failure
         if (isSaved) {
-            resp.sendRedirect(req.getContextPath() + "/adminProductManagement.jsp?saveSuccess=Product Saved Successfully!");
+            resp.sendRedirect(req.getContextPath() + "/all-product-admin-servlet?saveSuccess=Product Saved Successfully!");
         } else {
-            resp.sendRedirect(req.getContextPath() + "/adminProductManagement.jsp?saveFail=Product Save Failed!");
+            resp.sendRedirect(req.getContextPath() + "/all-product-admin-servlet?saveFail=Product Save Failed!");
         }
     }
 }

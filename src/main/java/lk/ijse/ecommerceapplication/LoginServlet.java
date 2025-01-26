@@ -23,7 +23,7 @@ public class LoginServlet extends HttpServlet {
         if (user!=null){
             if (password.equals(user.getPassword())){
                 if (user.getRole()== User.Role.ADMIN){
-                    resp.sendRedirect(req.getContextPath()+"/adminProductManagement.jsp");
+                    resp.sendRedirect(req.getContextPath() +"/all-product-admin-servlet");
                 } else {
                     resp.sendRedirect(req.getContextPath()+"/customerProductPage.jsp");
                 }
