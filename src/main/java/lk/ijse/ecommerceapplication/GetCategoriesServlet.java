@@ -1,6 +1,7 @@
 package lk.ijse.ecommerceapplication;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -22,7 +23,7 @@ public class GetCategoriesServlet extends HttpServlet {
         try {
             List<Category> categoryList = categoryBO.getAll();
 
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
             String json = gson.toJson(categoryList);
 
             resp.setContentType("application/json");

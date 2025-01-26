@@ -19,6 +19,9 @@
 <% String currentPage = "product"; %>
 <%@ include file="includes/adminNavBar.jsp" %>
 
+<% String saveSuccess = request.getParameter("saveSuccess");%>
+<% String saveFail = request.getParameter("saveFail");%>
+
 <!-- Content -->
 <div class="container mt-5">
     <h1 class="text-center mb-4">ADMIN</h1>
@@ -70,32 +73,32 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="addProductForm" enctype="multipart/form-data">
+                <form id="addProductForm" enctype="multipart/form-data" action="add-product-servlet" method="post">
                     <div class="mb-3">
                         <label for="category" class="form-label">Category</label>
-                        <select class="form-select" id="category" required>
+                        <select class="form-select" id="category" name="categoryId" required>
 
                         </select>
                     </div>
                     <div class="mb-3">
                         <label for="productName" class="form-label">Product Name</label>
-                        <input type="text" class="form-control" id="productName" required>
+                        <input type="text" class="form-control" id="productName" name="productName" required>
                     </div>
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" id="description" rows="3" required></textarea>
+                        <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="price" class="form-label">Price</label>
-                        <input type="number" class="form-control" id="price" required>
+                        <input type="number" class="form-control" id="price" name="price" required>
                     </div>
                     <div class="mb-3">
                         <label for="stock" class="form-label">Stock</label>
-                        <input type="number" class="form-control" id="stock" required>
+                        <input type="number" class="form-control" id="stock" name="stock" required>
                     </div>
                     <div class="mb-3">
                         <label for="productImage" class="form-label">Product Image</label>
-                        <input type="file" class="form-control" id="productImage" accept="image/*" required>
+                        <input type="file" class="form-control" id="productImage" name="productImage" accept="image/*" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Save Product</button>
                 </form>
@@ -168,6 +171,31 @@
         </div>
     </div>
 </div>
+<% if (saveSuccess != null && !saveSuccess.isEmpty()) { %>
+<!-- Success Toast -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                <%= saveSuccess %>
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+<% } else if (saveFail != null && !saveFail.isEmpty()) { %>
+<!-- Fail Toast -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div id="failToast" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                <%= saveFail %>
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+<% } %>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -202,6 +230,17 @@
         // Set product ID to delete (use AJAX or additional logic if needed)
         console.log("Preparing to delete product with ID: " + productId);
     }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const toastElement = document.getElementById('successToast');
+        const toast = new bootstrap.Toast(toastElement, { delay: 10000 }); // 10 seconds delay
+        toast.show();
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+        const toastElement = document.getElementById('failToast');
+        const toast = new bootstrap.Toast(toastElement, { delay: 10000 }); // 10 seconds delay
+        toast.show();
+    });
 </script>
 
 
