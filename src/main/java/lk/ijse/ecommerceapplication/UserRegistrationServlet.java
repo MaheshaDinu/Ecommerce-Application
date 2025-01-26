@@ -28,6 +28,7 @@ public class UserRegistrationServlet extends HttpServlet {
         String address = req.getParameter("address");
         String dob = req.getParameter("dob");
         boolean isActive = true;
+        System.out.println("User Saved");
 
         if (!password.equals(confirmPassword)){
             resp.sendRedirect("register.jsp?passwordMisMatch=Password Does not Match!");
