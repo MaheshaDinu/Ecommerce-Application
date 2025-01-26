@@ -5,6 +5,8 @@ import lk.ijse.ecommerceapplication.DAO.DAOFactory;
 import lk.ijse.ecommerceapplication.DAO.custom.UserDAO;
 import lk.ijse.ecommerceapplication.Entity.User;
 
+import java.util.List;
+
 public class UserBOImpl implements UserBO {
 
     UserDAO userDAO = (UserDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.USER);
@@ -15,5 +17,15 @@ public class UserBOImpl implements UserBO {
     @Override
     public User findByUserName(String userName) {
         return userDAO.findByUserName(userName);
+    }
+
+    @Override
+    public List<User> getAll() {
+        return userDAO.getAll();
+    }
+
+    @Override
+    public boolean updateStatus(String id, boolean status) {
+        return userDAO.updateStatus(id,status);
     }
 }

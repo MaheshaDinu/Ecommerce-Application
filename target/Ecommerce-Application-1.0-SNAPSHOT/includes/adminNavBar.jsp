@@ -16,7 +16,7 @@
                 <li class="nav-item"><a class="nav-link <%= "product".equals(currentPage) ? "active" : "" %>" href="adminProductManagement.jsp">Products</a></li>
                 <li class="nav-item"><a class="nav-link <%= "category".equals(currentPage) ? "active" : "" %>" href="<%=request.getContextPath() %>/all-category-servlet">Categories</a></li>
                 <li class="nav-item"><a class="nav-link <%= "orders".equals(currentPage) ? "active" : "" %>" href="adminOrdersView.jsp">Orders</a></li>
-                <li class="nav-item"><a class="nav-link <%= "users".equals(currentPage) ? "active" : "" %>" href="adminUserActivation.jsp">Users</a></li>
+                <li class="nav-item"><a class="nav-link <%= "users".equals(currentPage) ? "active" : "" %>" href="<%=request.getContextPath() %>/all-users-servlet">Users</a></li>
                 <li class="nav-item"><a class="nav-link " href="login.jsp">Logout</a></li>
             </ul>
         </div>
