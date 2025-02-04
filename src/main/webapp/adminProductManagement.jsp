@@ -69,12 +69,33 @@
             <td><%=String.valueOf(product.getStockQuantity())%></td>
             <td><img src="<%= request.getContextPath()+"/"+ product.getImageUrl() %>" alt="<%= product.getName() %>" class="table-img" style="width: 50px; height: 50px"></td>
             <td>
-                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editProductModal" onclick="populateEditModal(<%=product.getProductId()%>,<%=product.getName()%>,<%=product.getPrice()%>,<%=product.getDescription()%>,<%=product.getStockQuantity()%>,<%=product.getCategory()%>)">Edit</button>
-                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteProductModal" onclick="setDeleteConfirmation(`<%=product.getProductId()%>`)">Delete</button>
+                <button class="btn btn-primary btn-sm"
+                        data-bs-toggle="modal"
+                        data-bs-target="#editProductModal"
+                        data-productid="<%=product.getProductId()%>"
+                        data-productname="<%=product.getName()%>"
+                        data-price="<%=product.getPrice()%>"
+                        data-description="<%=product.getDescription()%>"
+                        data-stock="<%=product.getStockQuantity()%>"
+                        data-categoryid="<%=product.getCategory().getCategoryId()%>">
+                    Edit
+                </button>
+                <button
+                        class="btn btn-danger btn-sm"
+                        data-bs-toggle="modal"
+                        data-bs-target="#deleteProductModal"
+                        onclick="setDeleteConfirmation(
+                                '<%=product.getProductId()%>',
+                                '<%=product.getName()%>',
+                                '<%=product.getDescription()%>',
+                                '<%=product.getPrice()%>',
+                                '<%=product.getStockQuantity()%>'
+                                )">
+                    Delete
+                </button>
             </td>
         </tr>
         <%}%>
-        <!-- More rows can be dynamically added -->
         </tbody>
     </table>
     <%}
@@ -176,16 +197,39 @@
                 <h5 class="modal-title" id="deleteProductModalLabel">Confirm Deletion</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                Are you sure you want to delete this product?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-danger">Delete</button>
-            </div>
+            <form action="delete-product-servlet" method="post" id="deleteProductForm">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="deleteProductId" class="form-label">Product ID</label>
+                        <input type="text" class="form-control" id="deleteProductId" name="productId" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="deleteProductName" class="form-label">Product Name</label>
+                        <input type="text" class="form-control" id="deleteProductName" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="deleteProductDescription" class="form-label">Product Description</label>
+                        <textarea class="form-control" id="deleteProductDescription" rows="3" readonly></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="deleteProductPrice" class="form-label">Price</label>
+                        <input type="text" class="form-control" id="deleteProductPrice" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="deleteProductStock" class="form-label">Stock</label>
+                        <input type="text" class="form-control" id="deleteProductStock" readonly>
+                    </div>
+                    <p class="text-danger">Are you sure you want to delete this product?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
+
 <% if (saveSuccess != null && !saveSuccess.isEmpty()) { %>
 <!-- Success Toast -->
 <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
@@ -230,22 +274,40 @@
             });
         });
     });
-    $('#editProductModal').on('show.bs.modal', function() {
-        $.get(contextPath+'/get-categories-servlet', function(data) {
-            console.log(data)
-            const categorySelect = $('#editCategory');
-            categorySelect.empty(); // Clear any existing options
+    $('#editProductModal').on('show.bs.modal', function (event) {
+        // Get the button that triggered the modal
+        const button = $(event.relatedTarget);
+
+        // Get product data from button's dataset or arguments
+        const productId = button.data('productid');
+        const productName = button.data('productname');
+        const price = button.data('price');
+        const description = button.data('description');
+        const stock = button.data('stock');
+        const selectedCategoryId = button.data('categoryid'); // The ID of the product's category
+
+        // Populate modal fields
+        populateEditModal(productId, productName, price, description, stock);
+
+        // Populate categories dynamically
+        const categorySelect = $('#editCategory');
+        categorySelect.empty(); // Clear existing options
+
+        // Fetch categories and populate dropdown
+        $.get(contextPath + '/get-categories-servlet', function (data) {
             categorySelect.append('<option value="" selected disabled>Select a category</option>');
 
-            // Append categories to dropdown
-            data.forEach(function(category) {
-                categorySelect.append('<option value="' + category.categoryId + '">' + category.name + '</option>');
+            data.forEach(function (category) {
+                // Add each category and check if it matches the selectedCategoryId
+                const selected = category.categoryId === selectedCategoryId ? 'selected' : '';
+                categorySelect.append('<option value="' + category.categoryId + '" ' + selected + '>' + category.name + '</option>');
             });
         });
     });
 
 
-    function populateEditModal(productId, categoryName, price, description, stock, category) {
+
+    function populateEditModal(productId, categoryName, price, description, stock, categoryId) {
         // Populate the Edit Modal with product details (use AJAX or data from your database)
         document.getElementById('editProductId').value = productId;
         document.getElementById('editProductName').value = categoryName;
@@ -253,12 +315,17 @@
         document.getElementById('editPrice').value = price;
         document.getElementById('editStock').value = stock;
         const categorySelect = document.getElementById('editCategory');
-        categorySelect.value = category;
+        categorySelect.value =  categoryId ;
+
     }
 
-    function setDeleteConfirmation(productId) {
-        // Set product ID to delete (use AJAX or additional logic if needed)
-        console.log("Preparing to delete product with ID: " + productId);
+    function setDeleteConfirmation(productId, name, description, price, stock) {
+        // Populate the modal fields with product data
+        document.getElementById('deleteProductId').value = productId;
+        document.getElementById('deleteProductName').value = name;
+        document.getElementById('deleteProductDescription').value = description;
+        document.getElementById('deleteProductPrice').value = `Rs. `+price;
+        document.getElementById('deleteProductStock').value = stock;
     }
 
     document.addEventListener("DOMContentLoaded", function () {

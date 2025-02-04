@@ -66,9 +66,10 @@ public class ProductDAOImpl implements ProductDAO {
             Product product = session.get(Product.class, id);
             if (product != null) {
                 session.remove(product);
+                transaction.commit();
                 return true;
             }
-            transaction.commit();
+            transaction.rollback();
             return false;
         }
     }

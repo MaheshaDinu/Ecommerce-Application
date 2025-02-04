@@ -28,4 +28,9 @@ public class ProductBOImpl implements ProductBO {
     public Product findById(String id) {
         return productDAO.findById(id);
     }
+
+    @Override
+    public boolean delete(String id) {
+        return productDAO.delete(id);
+    }
 }
